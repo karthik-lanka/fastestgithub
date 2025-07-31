@@ -94,7 +94,11 @@ async def process_documents(request: ProcessRequest, token: str = Depends(verify
             answers[index] = answer
         
         logger.info(f"Successfully processed all questions")
+        # Ensure answers are cleaned before response
+        answers = [a.replace("\\n", "\n").replace('\\"', '"') for a in answers]
         return ProcessResponse(answers=answers)
+
+       
         
     except HTTPException:
         raise
