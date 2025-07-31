@@ -95,7 +95,7 @@ async def process_documents(request: ProcessRequest, token: str = Depends(verify
         
         logger.info(f"Successfully processed all questions")
         # Ensure answers are cleaned before response
-        answers = [a.replace("\\n", "\n").replace('\\"', '"') for a in answers]
+        answers = [re.sub(r'\s+', ' ', re.sub(r'\\[nrt"\\]', ' ', a)).strip().strip('"') for a in answers]
         return ProcessResponse(answers=answers)
 
        
